@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#03041C" />
+  <title>SAVA META — Game Chapter Strategy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --blue:#0741E1;--azure:#0078D7;--cyan:#00AFF0;--ice:#EDECFF;
+      --void:#03041C;--slate:#3A3A50;--dusk:#6F6C8F;--light:#A0A3BD;
+      --paper:#F7F8FC;--white:#fff;--line:rgba(3,4,28,.10);
+      --shadow:0 22px 70px rgba(3,4,28,.10);--max:1260px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:"Roboto",system-ui,sans-serif;color:var(--void);background:#fff;line-height:1.6;overflow-x:hidden}
+    h1,h2,h3,h4,.display,.kicker,.section-no,.chip,.tab,.flow-label,.lane-title,.bigline,.step strong,.nav-brand{font-family:"Space Grotesk",system-ui,sans-serif}
+    h1,h2,h3,p{margin-top:0} p{color:var(--slate)}
+    h1{font-size:clamp(3.7rem,9vw,8.8rem);line-height:.9;letter-spacing:-.065em;margin:0 0 22px}
+    h2{font-size:clamp(2.35rem,5vw,5rem);line-height:.98;letter-spacing:-.05em;margin:0 0 22px}
+    h3{font-size:clamp(1.28rem,2.2vw,1.9rem);line-height:1.1;letter-spacing:-.025em;margin:0 0 10px}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+    .section{padding:108px 0;position:relative;scroll-margin-top:86px}
+    .section.dark{background:var(--void);color:#fff}.section.dark p{color:rgba(255,255,255,.7)}
+    .section.soft{background:linear-gradient(180deg,#FBFCFF 0%,#F2F4FF 100%)}
+    .section-no{display:flex;align-items:center;gap:10px;font-size:.8rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--blue);margin-bottom:22px}
+    .section-no::before{content:"";width:30px;height:2px;background:currentColor}.dark .section-no{color:var(--cyan)}
+    .lead{font-size:clamp(1.08rem,1.65vw,1.34rem);max-width:850px;color:var(--slate)}
+    .dark .lead{color:rgba(255,255,255,.7)}
+    .statement{font-family:"Space Grotesk";font-weight:700;font-size:clamp(1.7rem,3vw,3rem);line-height:1.08;letter-spacing:-.035em}
+    .micro{font-size:.82rem;color:var(--dusk)}
+    .dark .micro{color:rgba(255,255,255,.48)}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:0 1px 0 rgba(3,4,28,.02)}
+    .dark .card{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.12);box-shadow:none}
+    .chip{display:inline-flex;align-items:center;padding:7px 11px;border-radius:999px;background:var(--ice);color:var(--blue);font-size:.76rem;font-weight:700}
+    .dark .chip{background:rgba(255,255,255,.08);color:var(--cyan)}
+    .quote{border-left:3px solid var(--blue);padding-left:18px;font-size:1.08rem;color:var(--slate)}.dark .quote{border-color:var(--cyan);color:rgba(255,255,255,.78)}
+    .divider{height:1px;background:var(--line);margin:24px 0}.dark .divider{background:rgba(255,255,255,.12)}
+
+    /* nav */
+    .nav{position:fixed;z-index:80;top:14px;left:50%;transform:translateX(-50%);width:min(1160px,calc(100% - 26px));display:flex;align-items:center;gap:12px;padding:9px 12px 9px 17px;border:1px solid rgba(3,4,28,.08);border-radius:999px;background:rgba(255,255,255,.84);backdrop-filter:blur(18px);box-shadow:0 12px 34px rgba(3,4,28,.08)}
+    .nav-brand{font-size:.86rem;font-weight:700;white-space:nowrap}.nav-links{display:flex;gap:4px;overflow:auto;scrollbar-width:none;margin-left:auto}.nav-links::-webkit-scrollbar{display:none}
+    .nav-links a{text-decoration:none;font-size:.73rem;font-weight:700;color:var(--dusk);padding:8px 10px;border-radius:999px;white-space:nowrap}.nav-links a:hover,.nav-links a.active{background:var(--ice);color:var(--blue)}
+
+    /* hero */
+    .hero{min-height:100vh;min-height:100dvh;padding:92px 0 44px;background:radial-gradient(circle at 10% 14%,rgba(0,175,240,.14),transparent 27%),radial-gradient(circle at 90% 18%,rgba(7,65,225,.16),transparent 31%),linear-gradient(180deg,#fff 0%,#F4F6FF 100%);display:flex;align-items:center;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,.94fr) minmax(520px,1.06fr);gap:42px;align-items:center;width:100%}
+    .hero-copy{min-width:0;padding:18px 0}
+    .hero h1{font-size:clamp(3.35rem,6.2vw,6.45rem);line-height:.91;max-width:760px;overflow-wrap:normal;margin-bottom:22px}
+    .hero-sub{font-family:"Space Grotesk";font-size:clamp(1.02rem,1.45vw,1.42rem);line-height:1.23;font-weight:600;color:var(--blue);max-width:680px}
+    .hero-note{margin-top:18px;font-size:.79rem;text-transform:uppercase;letter-spacing:.085em;color:var(--dusk)}
+    .hero-banner{position:relative;min-height:480px;border-radius:34px;background:var(--void);color:#fff;overflow:hidden;box-shadow:0 28px 80px rgba(3,4,28,.16);padding:34px;display:flex;flex-direction:column;justify-content:space-between;isolation:isolate}
+    .hero-banner::before{content:"";position:absolute;z-index:-2;inset:0;background:radial-gradient(circle at 24% 18%,rgba(0,175,240,.40),transparent 31%),radial-gradient(circle at 82% 72%,rgba(7,65,225,.48),transparent 38%)}
+    .hero-banner::after{content:"";position:absolute;z-index:-1;width:390px;height:390px;border-radius:50%;border:1px solid rgba(255,255,255,.10);right:-90px;top:-140px;box-shadow:0 0 0 72px rgba(255,255,255,.025),0 0 0 145px rgba(255,255,255,.018)}
+    .hero-banner-kicker{font-family:"Space Grotesk";font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;font-weight:700;color:var(--cyan)}
+    .hero-grammar{margin:auto 0;min-width:0}
+    .hero-fixed{font-family:"Space Grotesk";font-size:clamp(1.2rem,1.8vw,1.75rem);font-weight:600;letter-spacing:-.025em;color:rgba(255,255,255,.68)}
+    .hero-variable{font-family:"Space Grotesk";font-size:clamp(3rem,5.25vw,5.45rem);line-height:.92;letter-spacing:-.055em;font-weight:700;color:#fff;margin-top:9px;min-height:1.9em;display:flex;align-items:flex-start;transition:opacity .22s ease,transform .22s ease;overflow-wrap:anywhere}
+    .hero-path{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding-top:21px;border-top:1px solid rgba(255,255,255,.12)}
+    .hero-path span{font-family:"Space Grotesk";font-size:.67rem;font-weight:700;letter-spacing:.035em;color:rgba(255,255,255,.62)}
+    .hero-path i{font-style:normal;color:var(--cyan);opacity:.72}
+
+    /* start */
+    .start-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:34px}.start-item{min-height:170px;border-radius:20px;padding:18px;background:linear-gradient(180deg,#fff,#F6F7FF);border:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between}.start-item span{font-family:"Space Grotesk";font-size:.72rem;color:var(--blue);font-weight:700}.start-item strong{font-family:"Space Grotesk";font-size:1.05rem;line-height:1.15}
+
+    /* business */
+    .business{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:18px;margin-top:34px}.business .center{background:linear-gradient(145deg,var(--blue),var(--azure));color:#fff;border:none}.business .center p{color:rgba(255,255,255,.78)}.business-kicker{font-family:"Space Grotesk";font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--blue)}.center .business-kicker{color:var(--cyan)}
+    .business-flowline{font-family:"Space Grotesk";font-weight:700;color:var(--blue);margin:12px 0}.center .business-flowline{color:#fff}
+
+    /* audience architecture */
+    .aud-arch{display:grid;grid-template-columns:.85fr 1.15fr;gap:24px;margin-top:34px}.opening{background:var(--void);color:#fff}.opening p{color:rgba(255,255,255,.68)}.core-audiences{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.aud-chip{border:1px solid var(--line);border-radius:18px;padding:18px;background:#fff;min-height:118px;display:flex;flex-direction:column;justify-content:space-between}.aud-chip span{font-family:"Space Grotesk";font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:700}.states{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.state-pill{padding:8px 11px;border-radius:999px;background:var(--paper);font-size:.78rem;font-weight:700;color:var(--slate)}
+
+    /* audience profiles */
+    .profile-shell{display:grid;grid-template-columns:290px 1fr;gap:22px;margin-top:34px}.tabs{display:flex;flex-direction:column;gap:9px}.tab{border:1px solid var(--line);background:#fff;color:var(--slate);border-radius:15px;padding:14px 16px;font-weight:700;text-align:left;cursor:pointer;transition:.18s}.tab:hover,.tab.active{background:var(--void);color:#fff;border-color:var(--void);transform:translateX(4px)}
+    .profile{border:1px solid var(--line);border-radius:28px;padding:32px;background:linear-gradient(145deg,#FAFBFF,#EEF2FF);min-height:450px}.profile-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}.profile-role{font-family:"Space Grotesk";font-weight:700;color:var(--blue);font-size:.85rem}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}.profile-block{background:rgba(255,255,255,.8);border:1px solid rgba(3,4,28,.06);border-radius:18px;padding:18px}.profile-block label{display:block;font-family:"Space Grotesk";font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:700;margin-bottom:8px}.profile-block p{margin:0}.profile-block.message{grid-column:1/-1;background:var(--void);border-color:var(--void)}.profile-block.message label{color:var(--cyan)}.profile-block.message p{color:#fff;font-family:"Space Grotesk";font-weight:600;font-size:1.05rem}
+
+    /* ecosystem */
+    .ecosystem-shell{margin-top:36px;display:grid;gap:18px}
+    .eco-main{background:var(--void);color:#fff;border-radius:30px;padding:30px;overflow:auto}
+    .eco-main p{color:rgba(255,255,255,.64)}
+    .flowchart{min-width:820px;display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 0}
+    .flow-top{width:100%;display:grid;grid-template-columns:1fr 42px 1fr 42px 1fr 42px 1fr;align-items:center}
+    .flow-card{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);border-radius:17px;padding:15px 16px;min-height:70px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+    .flow-card strong{font-family:"Space Grotesk";font-size:.94rem}.flow-card small{font-size:.73rem;color:rgba(255,255,255,.55);margin-top:3px}
+    .flow-card.primary{background:linear-gradient(145deg,rgba(7,65,225,.58),rgba(0,175,240,.18));border-color:rgba(0,175,240,.34)}
+    .flow-arrow{font-family:"Space Grotesk";font-weight:700;color:var(--cyan);text-align:center;font-size:1.2rem}
+    .flow-down{font-family:"Space Grotesk";font-weight:700;color:var(--cyan);font-size:1.25rem;line-height:1}
+    .maturity-card{width:min(360px,44%)}
+    .split-arrows{width:min(620px,76%);display:grid;grid-template-columns:1fr 1fr;color:var(--cyan);font-family:"Space Grotesk";font-size:1.45rem;text-align:center;line-height:1}
+    .flow-branches{width:min(760px,92%);display:grid;grid-template-columns:1fr 1fr;gap:34px}
+    .branch{display:grid;gap:8px}.branch .flow-card{min-height:64px}.branch .flow-arrow{font-size:1rem}
+    .merge-arrows{width:min(620px,76%);display:grid;grid-template-columns:1fr 1fr;color:var(--cyan);font-family:"Space Grotesk";font-size:1.45rem;text-align:center;line-height:1}
+    .merge-arrows span:first-child{transform:translateX(22%)}.merge-arrows span:last-child{transform:translateX(-22%)}
+    .result-card,.partner-card,.proof-card{width:min(360px,44%)}
+    .split-note{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.split-note .card{padding:18px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12)}.split-note p{margin:0;color:rgba(255,255,255,.7)}
+    .publisher-lane{border:1px solid var(--line);border-radius:24px;padding:24px;background:#fff;color:var(--void)}.publisher-row{display:grid;grid-template-columns:180px repeat(4,1fr);gap:10px;align-items:stretch}.pub-entry,.pub-step{border-radius:16px;padding:16px;border:1px solid var(--line);background:var(--paper)}.pub-entry{background:var(--blue);color:#fff;border-color:var(--blue)}.pub-entry p{color:rgba(255,255,255,.75)!important;margin:6px 0 0}.pub-step{color:var(--void)}.pub-step strong{font-family:"Space Grotesk";display:block;font-size:.9rem;color:var(--void)}
+    .state-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.state-note{border-radius:18px;border:1px solid var(--line);padding:18px;background:#fff;color:var(--void)}.state-note .flow-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:700}.state-note strong{display:block;font-family:"Space Grotesk";margin:8px 0 5px;color:var(--void)}.section.dark .state-note p{color:var(--slate)!important}
+
+    /* big idea */
+    .bigidea{min-height:100svh;display:flex;align-items:center;background:radial-gradient(circle at 18% 18%,rgba(0,175,240,.2),transparent 28%),radial-gradient(circle at 82% 72%,rgba(7,65,225,.34),transparent 34%),var(--void);color:#fff}.idea-stack{display:grid;gap:36px}.idea-row{display:grid;grid-template-columns:150px 1fr;gap:24px}.idea-label{font-family:"Space Grotesk";font-size:.74rem;text-transform:uppercase;letter-spacing:.11em;color:var(--cyan);font-weight:700;padding-top:8px}.bigline{font-weight:700;font-size:clamp(2.2rem,5.6vw,5.8rem);line-height:.95;letter-spacing:-.055em}.bigline small{display:block;font-family:"Roboto";font-size:1rem;letter-spacing:0;line-height:1.55;font-weight:400;color:rgba(255,255,255,.6);margin-top:13px;max-width:760px}.logic{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.logic span{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.15);font-family:"Space Grotesk";font-size:.78rem;color:rgba(255,255,255,.8)}
+
+    /* manifesto */
+    .manifesto{background:#fff}.manifesto-copy{max-width:980px;margin-top:26px;font-family:"Space Grotesk";font-size:clamp(1.65rem,3.5vw,3.15rem);line-height:1.25;letter-spacing:-.03em;font-weight:600}.manifesto-copy .softline{color:var(--slate)}.manifesto-end{margin-top:42px;padding-top:28px;border-top:1px solid var(--line);font-family:"Space Grotesk";font-weight:700;font-size:clamp(1.8rem,3.3vw,3.2rem);line-height:1.05;color:var(--blue)}
+
+    /* play can become */
+    .become-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:34px}.become-card{border-radius:26px;padding:28px;border:1px solid var(--line);background:#fff}.word-cloud{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.word-cloud span{padding:8px 11px;border-radius:999px;background:var(--paper);font-family:"Space Grotesk";font-size:.8rem;font-weight:700}.path-quote{margin-top:22px;border-radius:22px;background:var(--void);color:#fff;padding:24px}.path-quote p{margin:0;color:rgba(255,255,255,.74)}.path-quote strong{display:block;font-family:"Space Grotesk";font-size:1.15rem;margin-top:10px}
+
+    /* creative engine */
+    .engine{display:grid;grid-template-columns:.78fr 1.22fr;gap:26px;margin-top:36px;align-items:start}
+    .engine-stage{position:sticky;top:90px;border-radius:28px;background:var(--void);color:#fff;padding:34px;min-height:440px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+    .engine-stage::after{content:"";position:absolute;width:300px;height:300px;border-radius:50%;right:-120px;bottom:-130px;border:1px solid rgba(255,255,255,.10);box-shadow:0 0 0 65px rgba(255,255,255,.025)}
+    .engine-stage .when{font-family:"Space Grotesk";font-size:clamp(1.15rem,1.8vw,1.65rem);line-height:1.05;color:rgba(255,255,255,.58);font-weight:600;letter-spacing:-.02em}
+    .engine-stage .rotator{font-family:"Space Grotesk";font-size:clamp(2.65rem,5vw,5.1rem);line-height:.94;letter-spacing:-.055em;font-weight:700;color:var(--cyan);margin:12px 0 24px;min-height:1.9em;display:flex;align-items:flex-start;transition:opacity .22s ease,transform .22s ease;overflow-wrap:anywhere}
+    .engine-stage p{position:relative;z-index:1;margin-bottom:0}
+    .grammar-path{margin-top:22px;padding:16px 18px;border-radius:16px;background:var(--paper);font-family:"Space Grotesk";font-size:.78rem;font-weight:700;color:var(--slate);line-height:1.7}
+    .grammar-pool{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .grammar-group{border:1px solid var(--line);border-radius:18px;padding:17px 18px;background:#fff}
+    .grammar-group .group-name{display:block;font-family:"Space Grotesk";font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:700;margin-bottom:9px}
+    .grammar-group strong{display:block;font-family:"Space Grotesk";font-size:.9rem;line-height:1.25;margin:5px 0;color:var(--void)}
+    .grammar-group strong b{color:var(--blue)}
+    .grammar-group.wide{grid-column:1/-1}
+    .principle-band{margin-top:18px;border-radius:18px;padding:18px 20px;background:var(--paper);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.principle-band strong{font-family:"Space Grotesk"}
+
+    /* content system */
+    .content-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}.content-card{border:1px solid var(--line);border-radius:22px;background:#fff;padding:22px}.content-card .aud{font-family:"Space Grotesk";font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);font-weight:700}.territory{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.territory span{font-size:.76rem;padding:7px 9px;border-radius:999px;background:var(--paper);color:var(--slate)}
+
+    /* activity */
+    .loop{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:center;margin-top:30px;overflow:auto;padding-bottom:4px}.step{min-width:132px;border:1px solid var(--line);border-radius:16px;background:#fff;padding:16px;text-align:center}.step strong{font-size:.82rem}.arrow{font-size:1.2rem;color:var(--blue);text-align:center}.activity-table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:30px}.activity-table th,.activity-table td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.activity-table th{background:var(--paper);font-family:"Space Grotesk";font-size:.72rem;text-transform:uppercase;letter-spacing:.06em}.activity-table tr:last-child td{border-bottom:none}
+
+    /* conversion */
+    .lanes{display:grid;gap:13px;margin-top:30px}.lane{display:grid;grid-template-columns:190px 1fr 180px;gap:14px;align-items:center;border:1px solid var(--line);border-radius:18px;background:#fff;padding:18px}.lane-title{font-weight:700}.lane-flow{display:flex;align-items:center;gap:7px;overflow:auto}.lane-flow span{flex:0 0 auto;padding:8px 10px;border-radius:999px;background:var(--paper);font-size:.75rem;font-weight:700}.lane-flow i{font-style:normal;color:var(--blue)}.lane-dest{text-align:right;font-family:"Space Grotesk";font-weight:700;color:var(--blue)}
+
+    /* proof */
+    .proof-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:center;margin-top:34px}.proof-orbit{aspect-ratio:1;border-radius:50%;border:1px solid var(--line);position:relative;background:radial-gradient(circle at center,rgba(0,175,240,.12),transparent 58%)}.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:155px;height:155px;border-radius:50%;display:grid;place-items:center;text-align:center;background:var(--void);color:#fff;font-family:"Space Grotesk";font-weight:700}.orbit-label{position:absolute;padding:9px 11px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:.74rem;font-weight:700;box-shadow:0 8px 22px rgba(3,4,28,.06)}.o1{left:50%;top:3%;transform:translateX(-50%)}.o2{right:0;top:26%}.o3{right:9%;bottom:11%}.o4{left:50%;bottom:0;transform:translateX(-50%)}.o5{left:0;bottom:25%}.o6{left:1%;top:24%}.proof-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.proof-list span{padding:10px 12px;border-radius:12px;background:var(--paper);font-size:.78rem;font-weight:700}
+
+    /* role / brand / rules */
+    .master-role{border-radius:30px;background:var(--void);color:#fff;padding:42px;margin-top:28px}.master-role p{color:rgba(255,255,255,.72);margin:0}.master-role strong{display:block;font-family:"Space Grotesk";font-size:clamp(1.8rem,3.6vw,3.5rem);line-height:1.08;letter-spacing:-.04em;margin-bottom:16px}.brand-box{border-radius:30px;padding:36px;background:linear-gradient(145deg,#F0F4FF,#E7F9FF);border:1px solid rgba(7,65,225,.1);margin-top:30px}.brand-box .brand-master{font-family:"Space Grotesk";font-size:clamp(1.7rem,3vw,2.7rem);font-weight:700;line-height:1.1;color:var(--blue)}
+    .rules{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}.rule{border-radius:20px;padding:22px;background:var(--void);color:#fff;min-height:210px}.rule span{font-family:"Space Grotesk";font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan);font-weight:700}.rule p{color:rgba(255,255,255,.66);font-size:.88rem;margin-bottom:0}
+
+    /* closing */
+    .closing{background:var(--void);color:#fff}.closing-logic{display:grid;gap:12px;margin-top:34px}.closing-row{display:grid;grid-template-columns:42px 1fr;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.08)}.closing-row:last-child{border-bottom:none}.closing-row .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);font-family:"Space Grotesk";font-size:.7rem;color:var(--cyan)}.closing-row strong{font-family:"Space Grotesk";font-size:clamp(1.15rem,2.4vw,2rem)}.closing-assets{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:38px}.closing-asset{border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:18px;font-family:"Space Grotesk";font-weight:700;color:#fff;background:rgba(255,255,255,.05)}
+
+    .reveal{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}.reveal.in{opacity:1;transform:none}
+
+    @media(max-height:820px) and (min-width:1051px){
+      .hero{padding:80px 0 34px}
+      .hero h1{font-size:clamp(3rem,5.4vw,5.4rem);margin-bottom:16px}
+      .hero-sub{font-size:clamp(.98rem,1.25vw,1.24rem)}
+      .hero-note{margin-top:13px}
+      .hero-banner{min-height:390px;padding:28px}
+      .hero-variable{font-size:clamp(2.7rem,4.65vw,4.65rem)}
+    }
+    @media(max-height:700px) and (min-width:1051px){
+      .hero{align-items:flex-start;padding-top:78px}
+      .hero h1{font-size:clamp(2.8rem,4.8vw,4.75rem)}
+      .hero-banner{min-height:340px}
+      .hero-path{display:none}
+    }
+    @media(max-width:1050px){
+      .hero-grid,.business,.aud-arch,.engine,.proof-grid{grid-template-columns:1fr}
+      .hero{min-height:auto;padding:104px 0 68px;align-items:flex-start}
+      .hero-copy{padding:0}
+      .hero-banner{min-height:400px;width:100%}
+      .core-audiences{grid-template-columns:repeat(3,1fr)}.start-grid{grid-template-columns:repeat(3,1fr)}.content-grid{grid-template-columns:repeat(2,1fr)}.rules{grid-template-columns:repeat(2,1fr)}.profile-shell{grid-template-columns:240px 1fr}.publisher-row{grid-template-columns:1fr 1fr}.state-notes{grid-template-columns:1fr}.become-grid{grid-template-columns:1fr}
+      .engine-stage{position:relative;top:auto;min-height:360px}
+    }
+    @media(max-width:760px){
+      .section{padding:78px 0}.flowchart{min-width:700px}.flow-top{grid-template-columns:1fr 34px 1fr 34px 1fr 34px 1fr}.nav-links{display:none}
+      .hero{padding:94px 0 56px}.hero-grid{gap:28px}.hero h1{font-size:clamp(3rem,13vw,5rem)}.hero-banner{min-height:350px;padding:26px;border-radius:28px}.hero-variable{font-size:clamp(2.65rem,12vw,4.5rem);min-height:2em}.hero-path{gap:5px}.hero-path span{font-size:.61rem}
+      .start-grid,.core-audiences,.content-grid,.rules,.closing-assets{grid-template-columns:1fr 1fr}.profile-shell{grid-template-columns:1fr}.tabs{display:grid;grid-template-columns:repeat(2,1fr)}.tab:hover,.tab.active{transform:none}.profile-grid{grid-template-columns:1fr}.profile-block.message{grid-column:auto}.idea-row{grid-template-columns:1fr;gap:8px}.idea-label{padding-top:0}.loop{grid-template-columns:repeat(13,max-content)}.lane{grid-template-columns:1fr}.lane-dest{text-align:left}.proof-grid{gap:20px}.proof-list{grid-template-columns:1fr}.publisher-row{grid-template-columns:1fr}.closing-row{grid-template-columns:34px 1fr}.manifesto-copy{font-size:clamp(1.45rem,6vw,2.3rem)}
+      .grammar-pool{grid-template-columns:1fr}
+      .grammar-group.wide{grid-column:auto}
+    }
+    @media(max-width:520px){
+      .wrap{width:min(var(--max),calc(100% - 26px))}.start-grid,.core-audiences,.content-grid,.rules,.closing-assets,.tabs{grid-template-columns:1fr}
+      .hero h1{font-size:clamp(2.85rem,14.5vw,4.25rem)}.hero-sub{font-size:1rem}.hero-banner{min-height:330px;padding:22px}.hero-variable{font-size:clamp(2.5rem,13vw,3.8rem)}.hero-path{display:none}
+      .profile{padding:22px}.bigline{font-size:clamp(2rem,12vw,3.6rem)}.manifesto-end{font-size:1.7rem}.proof-orbit{min-height:330px}.orbit-label{font-size:.65rem}.o2{right:-3%}.o5{left:-3%}
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-brand">SAVA META — GAME CHAPTER</div>
+    <div class="nav-links">
+      <a href="#business">Business</a><a href="#audience">Audience</a><a href="#ecosystem">Ecosystem</a><a href="#bigidea">Big Idea</a><a href="#content">Content</a><a href="#conversion">Conversion</a><a href="#proof">Proof</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <div class="section-no">SAVA META — GAME CHAPTER</div>
+        <h1>WHAT WE PLAY<br>BECOMES US.</h1>
+        <div class="hero-sub">START WITH PLAY. BUILD YOUR WAY.<br>GAME MỞ ĐẦU. BẠN MỞ LỐI.</div>
+        <div class="hero-note">Different entry points. Different paths. One ecosystem.</div>
+      </div>
+      <div class="hero-banner">
+        <div class="hero-banner-kicker">Creative Grammar</div>
+        <div class="hero-grammar">
+          <div class="hero-fixed">WHEN PLAY BECOMES</div>
+          <div class="hero-variable js-play-rotator">A MEMORY.</div>
+        </div>
+        <div class="hero-path" aria-label="Play can become many things">
+          <span>MEMORY</span><i>→</i><span>PEOPLE</span><i>→</i><span>IDENTITY</span><i>→</i><span>CURIOSITY</span><i>→</i><span>MAKING</span><i>→</i><span>GAME</span><i>→</i><span>OPPORTUNITY</span><i>→</i><span>PROOF</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="starting-point">
+    <div class="wrap reveal in">
+      <div class="section-no">01 / The Starting Point</div>
+      <h2>Game không phải lúc nào cũng là điểm đến.<br>Đôi khi, nó chỉ là điểm bắt đầu.</h2>
+      <p class="lead">Có người bắt đầu từ việc xem. Có người bắt đầu từ việc chơi. Có người tìm thấy những người giống mình. Có người tò mò Game được tạo ra thế nào. Có người thử làm một nhân vật, một mechanic hay một bản build. Có team đã có Game và muốn đưa nó ra thị trường. Có Publisher đang tìm một cơ hội đáng để cùng phát triển.</p>
+      <div class="statement" style="margin-top:28px">Không có một hành trình duy nhất cho tất cả.</div>
+      <div class="start-grid">
+        <div class="start-item"><span>01</span><strong>Player</strong></div>
+        <div class="start-item"><span>02</span><strong>Community Member</strong></div>
+        <div class="start-item"><span>03</span><strong>Artist / Developer</strong></div>
+        <div class="start-item"><span>04</span><strong>Indie Team</strong></div>
+        <div class="start-item"><span>05</span><strong>Studio</strong></div>
+        <div class="start-item"><span>06</span><strong>Publisher / Scout</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" id="business">
+    <div class="wrap reveal">
+      <div class="section-no">02 / Business Architecture</div>
+      <h2>BUSINESS ARCHITECTURE</h2>
+      <div class="business">
+        <div class="card">
+          <div class="business-kicker">SAVA Publishing</div>
+          <h3>MARKET HAS GAMES → SAVA FINDS GAMES</h3>
+          <p>Tìm Creator / Indie Team / Studio có Game tiềm năng để đánh giá, hỗ trợ và Publishing.</p>
+          <div class="business-flowline">Creator / Studio → SAVA Publishing</div>
+        </div>
+        <div class="card center">
+          <div class="business-kicker">SAVA META</div>
+          <h3>Audience → Community → Trust → Ecosystem → Opportunity</h3>
+          <p>SAVA META đóng vai trò umbrella brand, xây audience, community, trust và kết nối hệ sinh thái.</p>
+        </div>
+        <div class="card">
+          <div class="business-kicker">SAVA Game Studio</div>
+          <h3>SAVA HAS GAMES → SAVA FINDS PUBLISHERS</h3>
+          <p>Phát triển các SAVA titles và tìm Publisher / Publishing Partner phù hợp.</p>
+          <div class="business-flowline">Publisher / Scout → SAVA Game Studio</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="audience-architecture">
+    <div class="wrap reveal">
+      <div class="section-no">03 / Audience Architecture</div>
+      <h2>Opening Audience + Core Audiences.</h2>
+      <div class="aud-arch">
+        <div class="card opening">
+          <span class="chip">OPENING AUDIENCE</span>
+          <h3 style="margin-top:18px">Mass Audience</h3>
+          <p>Stage 0 — Mass Brand Awareness.</p>
+        </div>
+        <div>
+          <div class="core-audiences">
+            <div class="aud-chip"><span>Core 01</span><strong>Game Audience</strong></div>
+            <div class="aud-chip"><span>Core 02</span><strong>Game Maker</strong></div>
+            <div class="aud-chip"><span>Core 03</span><strong>Publishing Prospect</strong></div>
+            <div class="aud-chip"><span>Core 04</span><strong>Publisher / Scout</strong></div>
+            <div class="aud-chip"><span>Core 05</span><strong>Partner / Advocate</strong></div>
+          </div>
+          <div class="states">
+            <span class="state-pill">Future Builder State</span><span class="state-pill">Product Maturity Check</span><span class="state-pill">Community Nurture</span><span class="state-pill">Success / Advocacy Proof Loop</span>
+          </div>
+          <p class="micro" style="margin-top:10px">Các mục trên là state / mechanism, không phải target audience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" id="audience">
+    <div class="wrap reveal">
+      <div class="section-no">04 / Audience Profiles</div>
+      <h2>Tension → Insight → Role → Message.</h2>
+      <div class="profile-shell">
+        <div class="tabs" id="audTabs"></div>
+        <div class="profile" id="audPanel"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark" id="ecosystem">
+    <div class="wrap reveal">
+      <div class="section-no">05 / Multi-entry Ecosystem</div>
+      <h2>ONE ECOSYSTEM.<br>MULTIPLE ENTRY POINTS.<br>SHARED ACTIVITIES.<br>REUSABLE PROOF.</h2>
+      <p class="lead">SAVA không giả định tất cả mọi người phải đi Gamer → Builder → Maker → Studio → Publisher. Game Audience có thể vào từ cultural content. Game Maker có thể vào thẳng từ workshop, Game Jam hoặc community. Studio đã có playable build có thể vào thẳng Publishing Prospect. Publisher có thể biết SAVA lần đầu qua title, showcase, event, case hoặc referral.</p>
+      <div class="ecosystem-shell">
+        <div class="eco-main">
+          <div class="flowchart">
+            <div class="flow-top">
+              <div class="flow-card primary"><strong>Mass Audience</strong><small>Stage 0 — Mass Brand Awareness</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-card primary"><strong>Game Audience</strong></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-card"><strong>Future Builder State</strong><small>Curiosity → First Action</small></div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-card primary"><strong>Game Maker</strong></div>
+            </div>
+            <div class="flow-down">↓</div>
+            <div class="flow-card maturity-card"><strong>Product Maturity Check</strong><small>Build → Qualification</small></div>
+            <div class="split-arrows"><span>↙</span><span>↘</span></div>
+            <div class="flow-branches">
+              <div class="branch">
+                <div class="flow-card"><strong>Community Nurture</strong></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-card"><strong>Build / Improve</strong></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-card"><strong>Re-qualify</strong></div>
+              </div>
+              <div class="branch">
+                <div class="flow-card primary"><strong>Publishing Prospect</strong></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-card"><strong>Review / Pitch</strong></div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-card"><strong>Opportunity / Deal</strong></div>
+              </div>
+            </div>
+            <div class="merge-arrows"><span>↘</span><span>↙</span></div>
+            <div class="flow-card result-card primary"><strong>Result</strong></div>
+            <div class="flow-down">↓</div>
+            <div class="flow-card partner-card"><strong>Partner / Advocate</strong></div>
+            <div class="flow-down">↓</div>
+            <div class="flow-card proof-card primary"><strong>Proof Loop</strong></div>
+          </div>
+          <div class="split-note">
+            <div class="card"><p><strong style="color:#fff;font-family:'Space Grotesk'">Publishing Prospect → SAVA Publishing</strong></p></div>
+            <div class="card"><p><strong style="color:#fff;font-family:'Space Grotesk'">Publisher / Scout → SAVA Game Studio</strong></p></div>
+          </div>
+        </div>
+        <div class="publisher-lane">
+          <div class="publisher-row">
+            <div class="pub-entry"><strong style="font-family:'Space Grotesk'">Publisher / Scout</strong><p>Can enter anywhere.</p></div>
+            <div class="pub-step"><strong>SAVA Title / Showcase / Event / Case / Referral / Outreach</strong></div>
+            <div class="pub-step"><strong>Title Review</strong></div>
+            <div class="pub-step"><strong>Business Discussion</strong></div>
+            <div class="pub-step"><strong>Game Studio Deal</strong></div>
+          </div>
+        </div>
+        <div class="state-notes">
+          <div class="state-note"><div class="flow-label">Future Builder</div><strong>Game Audience → Game Maker</strong><p>Curiosity → First Action. Không thiếu tutorial; thiếu một điểm bắt đầu và những người thật để hỏi.</p></div>
+          <div class="state-note"><div class="flow-label">Product Maturity Check</div><strong>Game Maker → Nurture / Publishing Prospect</strong><p>Build → Qualification.</p></div>
+          <div class="state-note"><div class="flow-label">Community Nurture</div><strong>Build → Feedback → Improve → Showcase → Re-qualify</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bigidea" id="bigidea">
+    <div class="wrap reveal">
+      <div class="section-no">06 / Big Idea Platform</div>
+      <div class="idea-stack">
+        <div class="idea-row"><div class="idea-label">WHY — Cultural Belief</div><div class="bigline">WHAT WE PLAY BECOMES US.<small>Những gì ta chơi dần trở thành một phần của chính ta.</small></div></div>
+        <div class="idea-row"><div class="idea-label">HOW — Brand Invitation</div><div class="bigline">START WITH PLAY. BUILD YOUR WAY.<small>GAME MỞ ĐẦU. BẠN MỞ LỐI.</small></div></div>
+        <div class="idea-row"><div class="idea-label">STORY ENGINE</div><div class="bigline">WHEN PLAY BECOMES…</div></div>
+      </div>
+      <div class="logic"><span>BELIEF</span><span>→</span><span>AGENCY</span><span>→</span><span>STORY</span></div>
+    </div>
+  </section>
+
+  <section class="section manifesto" id="manifesto">
+    <div class="wrap reveal">
+      <div class="section-no">07 / Manifesto</div>
+      <div class="manifesto-copy">
+        <div>Có những thứ bắt đầu chỉ bằng một cuộc chơi.</div>
+        <div class="softline">Một ký ức. Một người bạn. Một lần tò mò. Một ý tưởng đầu tiên.</div>
+        <br>
+        <div>Rồi sự tò mò có thể trở thành kỹ năng.</div>
+        <div>Một lần thử có thể trở thành bản build.</div>
+        <div>Một bản build có thể trở thành Game.</div>
+        <div>Và một Game có thể mở ra một cơ hội mới.</div>
+        <br>
+        <div class="softline">Không có một con đường duy nhất cho tất cả. Mỗi người bắt đầu ở một nơi khác nhau và tự xây bước tiếp theo của mình.</div>
+        <br>
+        <div>SAVA ở đó để giúp những khả năng ấy được nhìn thấy, phát triển và đi xa hơn.</div>
+      </div>
+      <div class="manifesto-end">WHAT WE PLAY BECOMES US.<br>START WITH PLAY. BUILD YOUR WAY.</div>
+    </div>
+  </section>
+
+  <section class="section soft" id="what-play-can-become">
+    <div class="wrap reveal">
+      <div class="section-no">08 / What Play Can Become</div>
+      <h2>Play opens the possibility.<br>You build the path.</h2>
+      <div class="become-grid">
+        <div class="become-card">
+          <span class="chip">WHAT WE PLAY BECOMES US</span>
+          <h3 style="margin-top:16px">Game không ở lại trên màn hình sau khi cuộc chơi kết thúc.</h3>
+          <p>“What we play” không chỉ là Game chúng ta chọn. Đó còn là thế giới ta bước vào, nhân vật ta yêu thích, cách ta phản ứng với thất bại, những người ta gặp, vai trò ta đảm nhận, điều ta tò mò và điều ta bắt đầu muốn tự mình tạo ra.</p>
+          <div class="word-cloud"><span>MEMORY</span><span>LANGUAGE</span><span>FRIENDSHIP</span><span>IDENTITY</span><span>SKILL</span><span>CURIOSITY</span><span>AN IDEA</span><span>A PATH</span></div>
+        </div>
+        <div class="become-card">
+          <span class="chip">START WITH PLAY. BUILD YOUR WAY.</span>
+          <h3 style="margin-top:16px">Build something. Build your own way.</h3>
+          <p>Một người có thể build a skill, a connection, a community, a portfolio, a Game, a studio, a partnership hoặc a new possibility.</p>
+          <div class="word-cloud"><span>A SKILL</span><span>A CONNECTION</span><span>A COMMUNITY</span><span>A PORTFOLIO</span><span>A GAME</span><span>A STUDIO</span><span>A PARTNERSHIP</span><span>A NEW POSSIBILITY</span></div>
+          <div class="path-quote"><p>Game có thể mở một cánh cửa. Nhưng SAVA không quyết định người dùng phải đi qua cánh cửa nào.</p><strong>SAVA helps it move forward.</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="creative-engine">
+    <div class="wrap reveal">
+      <div class="section-no">09 / Creative Engine</div>
+      <h2>WHEN PLAY BECOMES…</h2>
+      <p class="lead"><strong>“WHEN PLAY BECOMES…”</strong> không chỉ là một headline animation, mà là creative grammar cho cả Game Chapter. Cùng một creative device có thể đi từ mass audience ở upper funnel đến developer, studio và business ở lower funnel.</p>
+      <div class="grammar-path">PLAY → MEMORY → PEOPLE → IDENTITY → CURIOSITY → MAKING → GAME → OPPORTUNITY → PROOF</div>
+      <div class="engine">
+        <div class="engine-stage">
+          <div class="when">WHEN PLAY BECOMES</div>
+          <div class="rotator js-play-rotator">A MEMORY.</div>
+          <p>Phần mở bắt đầu từ con người, rồi dần đi tới sản phẩm và business.</p>
+        </div>
+        <div>
+          <div class="grammar-pool">
+            <div class="grammar-group"><span class="group-name">Memory / Emotion</span><strong>WHEN PLAY BECOMES <b>A MEMORY.</b></strong><strong>WHEN PLAY BECOMES <b>NOSTALGIA.</b></strong><strong>WHEN PLAY BECOMES <b>A FIRST LOVE.</b></strong></div>
+            <div class="grammar-group"><span class="group-name">Relationship</span><strong>WHEN PLAY BECOMES <b>A FRIENDSHIP.</b></strong><strong>WHEN PLAY BECOMES <b>FAMILY.</b></strong><strong>WHEN PLAY BECOMES <b>YOUR PEOPLE.</b></strong><strong>WHEN PLAY BECOMES <b>A LANGUAGE WE SHARE.</b></strong></div>
+            <div class="grammar-group"><span class="group-name">Identity / Culture</span><strong>WHEN PLAY BECOMES <b>PART OF WHO YOU ARE.</b></strong><strong>WHEN PLAY BECOMES <b>CULTURE.</b></strong><strong>WHEN PLAY BECOMES <b>A COMMUNITY.</b></strong></div>
+            <div class="grammar-group"><span class="group-name">Curiosity / Growth</span><strong>WHEN PLAY BECOMES <b>CURIOSITY.</b></strong><strong>WHEN PLAY BECOMES <b>A FIRST TRY.</b></strong><strong>WHEN PLAY BECOMES <b>A SKILL.</b></strong><strong>WHEN PLAY BECOMES <b>A CAREER.</b></strong></div>
+            <div class="grammar-group"><span class="group-name">Creation</span><strong>WHEN PLAY BECOMES <b>AN IDEA.</b></strong><strong>WHEN PLAY BECOMES <b>A BUILD.</b></strong><strong>WHEN PLAY BECOMES <b>SOMETHING YOU MADE.</b></strong><strong>WHEN PLAY BECOMES <b>A GAME.</b></strong></div>
+            <div class="grammar-group"><span class="group-name">Opportunity</span><strong>WHEN PLAY BECOMES <b>AN OPPORTUNITY.</b></strong><strong>WHEN PLAY BECOMES <b>A BUSINESS.</b></strong><strong>WHEN PLAY BECOMES <b>GLOBAL.</b></strong></div>
+            <div class="grammar-group wide"><span class="group-name">Proof / Legacy</span><strong>WHEN PLAY BECOMES <b>PROOF.</b></strong><strong>WHEN PLAY BECOMES <b>WHAT COMES NEXT.</b></strong><strong>WHEN PLAY BECOMES <b>SOMETHING THAT LASTS.</b></strong></div>
+          </div>
+          <div class="principle-band"><strong>UPPER FUNNEL → HUMAN / EMOTION / CULTURE</strong><strong>LOWER FUNNEL → PRODUCT / BUSINESS / PROOF</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" id="content">
+    <div class="wrap reveal">
+      <div class="section-no">10 / Content System</div>
+      <h2>Recognition → Relevance → Trust → Readiness.</h2>
+      <p class="lead">Always-on không có nhiệm vụ ép tất cả đi xuống cùng funnel.</p>
+      <div class="content-grid">
+        <div class="content-card"><div class="aud">Mass Audience</div><div class="territory"><span>Screen → Culture</span><span>Screen → Connection</span><span>Screen → Identity</span><span>Screen → Possibility</span></div></div>
+        <div class="content-card"><div class="aud">Game Audience</div><div class="territory"><span>Game & Đời</span><span>Game as a Safe Space</span><span>Game & Belonging</span><span>Behind the Game</span></div></div>
+        <div class="content-card"><div class="aud">Game Maker</div><div class="territory"><span>Build in Public</span><span>Fail, Fix, Learn</span><span>Maker Identity</span><span>Collaboration Stories</span><span>Practical Expertise</span></div></div>
+        <div class="content-card"><div class="aud">Publishing Prospect</div><div class="territory"><span>Product Maturity</span><span>Blind Spot Review</span><span>Publisher Fit</span><span>Pitch Readiness</span><span>Partnership Reality</span></div></div>
+        <div class="content-card"><div class="aud">Publisher / Scout</div><div class="territory"><span>Curated Opportunity</span><span>Studio Signal</span><span>Product & Market Proof</span><span>SAVA Expertise</span></div></div>
+        <div class="content-card"><div class="aud">Partner / Advocate</div><div class="territory"><span>Deal Context</span><span>Behind the Partnership</span><span>Milestone</span><span>Postmortem</span><span>Case Study</span><span>Partner Voice</span><span>What Happens Next</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="activity">
+    <div class="wrap reveal">
+      <div class="section-no">11 / Always-on → Key Activity</div>
+      <h2>Content creates readiness.<br>Activities create action.</h2>
+      <div class="loop">
+        <div class="step"><strong>ALWAYS-ON</strong></div><div class="arrow">→</div><div class="step"><strong>KEY ACTIVITY</strong></div><div class="arrow">→</div><div class="step"><strong>ACTION / SIGNAL</strong></div><div class="arrow">→</div><div class="step"><strong>QUALIFICATION</strong></div><div class="arrow">→</div><div class="step"><strong>OPPORTUNITY / DEAL</strong></div><div class="arrow">→</div><div class="step"><strong>RESULT</strong></div><div class="arrow">→</div><div class="step"><strong>PROOF</strong></div>
+      </div>
+      <table class="activity-table">
+        <thead><tr><th>Audience</th><th>Key Activity</th><th>Desired Action</th></tr></thead>
+        <tbody>
+          <tr><td>Mass / Game Audience</td><td>Cultural Activation / Role Discovery / Hỏi Ngay – Đáp Thật</td><td>Explore / Follow / Join</td></tr>
+          <tr><td>Future Builder</td><td>Mentor Q&A / Beginner Challenge / First Build</td><td>Try</td></tr>
+          <tr><td>Game Maker</td><td>Game Jam / Build Clinic / Playtest / Maker Showcase</td><td>Show Build</td></tr>
+          <tr><td>Publishing Prospect</td><td><strong>Road to Global / Publishing Review</strong></td><td>Submit Game</td></tr>
+          <tr><td>Publisher / Scout</td><td>Closed Showcase / Publisher Roundtable / Deal Room</td><td>Review Title</td></tr>
+          <tr><td>Partner / Advocate</td><td>Case Launch / Joint Talk / Referral</td><td>Repeat / Recommend</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section soft" id="conversion">
+    <div class="wrap reveal">
+      <div class="section-no">12 / Conversion Architecture</div>
+      <h2>Không tồn tại một loại “lead” chung.</h2>
+      <div class="lanes">
+        <div class="lane"><div class="lane-title">Audience Conversion</div><div class="lane-flow"><span>Game Audience</span><i>→</i><span>Future Builder</span><i>→</i><span>Game Maker</span><i>→</i><span>Follow / Join / Register / Ask / Attend / Build</span></div><div class="lane-dest"></div></div>
+        <div class="lane"><div class="lane-title">Publishing Conversion</div><div class="lane-flow"><span>Game Maker</span><i>→</i><span>Maturity Check</span><i>→</i><span>Publishing Prospect</span><i>→</i><span>Submission</span><i>→</i><span>Qualified Project</span><i>→</i><span>Opportunity / Deal</span></div><div class="lane-dest">SAVA PUBLISHING</div></div>
+        <div class="lane"><div class="lane-title">Publisher Conversion</div><div class="lane-flow"><span>Publisher / Scout</span><i>→</i><span>Title Interest</span><i>→</i><span>Build Review</span><i>→</i><span>Publishing Discussion</span><i>→</i><span>Deal</span></div><div class="lane-dest">SAVA GAME STUDIO</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="proof">
+    <div class="wrap reveal">
+      <div class="section-no">13 / Proof Loop</div>
+      <h2>BOFU không phải điểm kết thúc.</h2>
+      <p class="lead">Submission → Review → Pitch → Deal → Development → Launch → Result. Sau đó Result trở thành proof và quay lại nuôi ecosystem.</p>
+      <div class="proof-grid">
+        <div class="proof-orbit"><div class="hub">RESULT<br>→ PROOF</div><div class="orbit-label o1">Case Study</div><div class="orbit-label o2">Maker Story</div><div class="orbit-label o3">Postmortem</div><div class="orbit-label o4">Partner Voice</div><div class="orbit-label o5">Community Talk</div><div class="orbit-label o6">Business Proof</div></div>
+        <div>
+          <div class="statement">Output của BOFU trở thành input cho ecosystem tiếp theo.</div>
+          <div class="proof-list"><span>Development Diary</span><span>Behind the Partnership</span><span>PR</span><span>Milestone</span><span>Game Audience → possibility</span><span>Game Maker → learning & recognition</span><span>Studio → trust</span><span>Publisher → execution proof</span><span>Partner → repeatability</span><span>Mass Audience → cultural relevance</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" id="role">
+    <div class="wrap reveal">
+      <div class="section-no">14 / Role of SAVA</div>
+      <h2>MASTER ROLE</h2>
+      <div class="master-role"><strong>SAVA không quyết định Play phải trở thành điều gì.</strong><p>SAVA giúp con người nhìn thấy nó có thể trở thành điều gì — và điều gì cần có để bước tiếp.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="brand">
+    <div class="wrap reveal">
+      <div class="section-no">15 / Master Brand Connection</div>
+      <h2>Game Chapter không thay positioning của SAVA META.</h2>
+      <div class="brand-box">
+        <div class="micro">MASTER BRAND</div>
+        <div class="brand-master">SAVA META — Hiểu đúng vấn đề. Chọn cách phù hợp. Người bạn đồng hành trong kỷ nguyên số.</div>
+        <div class="divider"></div>
+        <div class="statement">Play tạo ra khả năng.<br>Con người lựa chọn con đường.<br>SAVA giúp khả năng ấy có cơ hội trở thành một điều lớn hơn.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section soft" id="rules">
+    <div class="wrap reveal">
+      <div class="section-no">16 / Creative Rules</div>
+      <h2>Giữ Big Idea không bị lệch khi triển khai.</h2>
+      <div class="rules">
+        <div class="rule"><span>01</span><h3>Human First</h3><p>Không bắt đầu bằng “SAVA cung cấp…”. Bắt đầu bằng người, cảm xúc, project, Game, vấn đề hoặc opportunity.</p></div>
+        <div class="rule"><span>02</span><h3>Transformation Over Promotion</h3><p>Mỗi story cần tồn tại một transformation: X → BECOMES → Y, dù headline có viết literal hay không.</p></div>
+        <div class="rule"><span>03</span><h3>SAVA Enables, Not Owns</h3><p>Player / Maker / Studio / Game là hero. SAVA giúp next thing become possible.</p></div>
+        <div class="rule"><span>04</span><h3>Emotion First, Proof Later</h3><p>Upper funnel: Memory / Identity / Belonging / Curiosity. Lower funnel: Product / Team / Data / Execution / Result.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section closing" id="closing">
+    <div class="wrap reveal">
+      <div class="section-no">17 / Master Logic</div>
+      <h2>Toàn bộ Game Chapter kể một câu chuyện.</h2>
+      <div class="closing-logic">
+        <div class="closing-row"><div class="num">01</div><strong>DIGITAL LIFE MATTERS.</strong></div>
+        <div class="closing-row"><div class="num">02</div><strong>PLAY CAN BECOME MORE.</strong></div>
+        <div class="closing-row"><div class="num">03</div><strong>DIFFERENT PEOPLE START AT DIFFERENT PLACES.</strong></div>
+        <div class="closing-row"><div class="num">04</div><strong>SAVA HELPS EACH OF THEM MOVE FORWARD.</strong></div>
+        <div class="closing-row"><div class="num">05</div><strong>CONTENT CREATES READINESS.</strong></div>
+        <div class="closing-row"><div class="num">06</div><strong>ACTIVITIES CREATE ACTION.</strong></div>
+        <div class="closing-row"><div class="num">07</div><strong>QUALIFICATION CREATES OPPORTUNITY.</strong></div>
+        <div class="closing-row"><div class="num">08</div><strong>RESULTS CREATE PROOF.</strong></div>
+        <div class="closing-row"><div class="num">09</div><strong>PROOF FEEDS THE ECOSYSTEM AGAIN.</strong></div>
+      </div>
+      <div class="closing-assets"><div class="closing-asset">WHAT WE PLAY BECOMES US.</div><div class="closing-asset">START WITH PLAY. BUILD YOUR WAY.</div><div class="closing-asset">WHEN PLAY BECOMES…</div></div>
+    </div>
+  </section>
+
+  <script>
+    const audiences = [
+      {
+        name:'Mass Audience', role:'The Cultural Entry Point',
+        desc:'Người trẻ chưa có quan hệ với SAVA, quan tâm đến Game, công nghệ, âm nhạc, thời trang, creator và digital culture ở mức rộng. Họ có thể không tự nhận mình là gamer, nhưng những trải nghiệm qua màn hình đã trở thành một phần tự nhiên trong cách họ giải trí, kết nối, thể hiện bản thân và nhìn nhận thế giới.',
+        tension:'Một phần rất thật trong cuộc sống của tôi diễn ra qua màn hình, nhưng vì nó diễn ra online nên người khác thường không nhìn thấy giá trị và ảnh hưởng mà tôi cảm nhận được.',
+        insight:'Tôi không tách cuộc sống của mình thành “thật” và “ảo” rõ ràng như người khác vẫn nghĩ. Những gì bắt đầu qua một màn hình vẫn có thể tạo ra cảm xúc thật, mối quan hệ thật và ảnh hưởng thật đến cách tôi nhìn thế giới.',
+        message:'WHAT WE PLAY BECOMES US. — Những gì chúng ta chơi, xem, nghe và trải nghiệm qua màn hình dần trở thành một phần trong ký ức, các mối quan hệ và con người chúng ta.'
+      },
+      {
+        name:'Game Audience', role:'The Inspirer',
+        tension:'Trong Game tôi được là mình và tìm thấy người giống mình; ngoài Game những điều đó dễ bị xem nhẹ.',
+        insight:'Game không chỉ là nơi tôi chơi. Nó là nơi tôi thử, sai, thể hiện mình và tìm được những người hiểu mình.',
+        message:'Game không chỉ cho bạn một thế giới để chơi. Nó cho bạn nơi để thử, để sai, để tìm ra mình là ai — và tìm thấy những người giống mình.'
+      },
+      {
+        name:'Game Maker', role:'The Practitioner / Mentor',
+        tension:'Muốn sản phẩm được nhìn thấy nhưng lại sợ người khác nhìn thấy những phần chưa tốt.',
+        insight:'Khi nét vẽ thành nhân vật, code thành chuyển động và người khác bắt đầu có cảm xúc với thứ tôi làm, tôi biết mình đang thực sự làm Game.',
+        message:'Bạn không cần chờ Game hoàn hảo mới được gọi là Game Maker.'
+      },
+      {
+        name:'Publishing Prospect', role:'The Evaluator / Publishing Partner',
+        tension:'Cần partner để đi xa hơn nhưng không muốn đánh đổi bản sắc hoặc quyền chủ động.',
+        insight:'Tôi cần một partner đủ tôn trọng thứ team đã làm nhưng cũng đủ giỏi để nhìn ra những blind spot chính chúng tôi không còn thấy.',
+        message:'Publisher phù hợp giúp Studio nhìn thấy điều còn thiếu và cùng đưa phiên bản tốt nhất của Game ra thị trường.'
+      },
+      {
+        name:'Publisher / Scout', role:'The Proven Game Maker / Strategic Partner',
+        tension:'Game thú vị tạo attention nhưng chưa đủ để đặt cược.',
+        insight:'Tôi không cần Game không có risk. Tôi cần đủ evidence để biết risk nào đáng nhận.',
+        message:'Ý tưởng tạo attention. Product, team, data và execution mới khiến Publisher đặt cược.'
+      },
+      {
+        name:'Partner / Advocate', role:'The Ecosystem Builder',
+        tension:'Một result tốt chưa đồng nghĩa với đủ trust để tiếp tục hoặc giới thiệu partner.',
+        insight:'Tôi tin partnership khi hiểu kết quả được tạo ra thế nào và thấy cách làm đó có khả năng lặp lại.',
+        message:'Kết quả cho thấy điều đã đạt được. Cách tạo ra kết quả chứng minh giá trị thật của partnership.'
+      }
+    ];
+
+    const tabs = document.getElementById('audTabs');
+    const panel = document.getElementById('audPanel');
+    function renderAudience(i){
+      const a = audiences[i];
+      [...tabs.children].forEach((b,idx)=>b.classList.toggle('active',idx===i));
+      panel.innerHTML = `
+        <div class="profile-top"><div><span class="chip">${i===0?'OPENING AUDIENCE':'CORE AUDIENCE'}</span><h3 style="margin-top:14px">${a.name}</h3></div><div class="profile-role">${a.role}</div></div>
+        ${a.desc?`<p class="lead" style="font-size:1rem;margin-top:16px">${a.desc}</p>`:''}
+        <div class="profile-grid">
+          <div class="profile-block"><label>Core Tension</label><p>${a.tension}</p></div>
+          <div class="profile-block"><label>Human Insight</label><p>${a.insight}</p></div>
+          <div class="profile-block message"><label>Key Message</label><p>${a.message}</p></div>
+        </div>`;
+    }
+    audiences.forEach((a,i)=>{const b=document.createElement('button');b.className='tab';b.textContent=a.name;b.addEventListener('click',()=>renderAudience(i));tabs.appendChild(b)});renderAudience(0);
+
+    const phrases=['A MEMORY.','YOUR PEOPLE.','A FIRST TRY.','SOMETHING YOU BUILD.','A GAME.','AN OPPORTUNITY.','PROOF.'];
+    let pi=0;
+    const rotators=[...document.querySelectorAll('.js-play-rotator')];
+    setInterval(()=>{
+      pi=(pi+1)%phrases.length;
+      rotators.forEach(el=>{el.style.opacity=0;el.style.transform='translateY(8px)'});
+      setTimeout(()=>rotators.forEach(el=>{el.textContent=phrases[pi];el.style.opacity=1;el.style.transform='none'}),220);
+    },2600);
+
+    const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    const links=[...document.querySelectorAll('.nav-links a')];
+    const sections=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const navIO=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-35% 0px -55% 0px'});sections.forEach(s=>navIO.observe(s));
+  </script>
+</body>
+</html>
